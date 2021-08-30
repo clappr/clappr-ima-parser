@@ -1,0 +1,79 @@
+{
+  "name": "@clappr/ima-parser-plugin",
+  "version": "1.0.0",
+  "description": "A Clappr plugin to communicate with IMA and play ads.",
+  "keywords": [
+    "clappr",
+    "plugin",
+    "ads",
+    "IMA",
+    "advertisement"
+  ],
+  "homepage": "https://github.com/clappr/clappr-ima-parser-plugin",
+  "bugs": {
+    "url": "https://github.com/clappr/clappr-ima-parser-plugin/issues",
+    "email": "player-web@g.globo"
+  },
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "Globo (digital hub)",
+    "email": "player-web@g.globo"
+  },
+  "files": [
+    "/dist",
+    "/src"
+  ],
+  "source": "src/ima-parser.js",
+  "main": "dist/clappr-ima-parser-plugin.js",
+  "module": "dist/clappr-ima-parser-plugin.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:clappr/clappr-ima-parser-plugin.git"
+  },
+  "scripts": {
+    "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
+    "build": "rollup --config",
+    "release": "MINIMIZE=true rollup --config",
+    "prepublishOnly": "npm run release",
+    "start": "DEV=true rollup --config --watch",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "jest --coverage --silent",
+    "test:coverage": "open coverage/lcov-report/index.html",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "@clappr/core": "^0.4.18",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "babel-jest": "^26.6.3",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.24.0",
+    "jest": "^26.6.3",
+    "rollup": "^2.45.1",
+    "rollup-plugin-filesize": "^9.1.1",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-sizes": "^1.0.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-visualizer": "^5.3.1"
+  },
+  "peerDependencies": {
+    "@clappr/core": "^0.4.18"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not ie <= 11"
+  ]
+}
