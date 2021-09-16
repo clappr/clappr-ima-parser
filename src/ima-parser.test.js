@@ -31,4 +31,16 @@ describe('IMAParserPlugin', () => {
     expect(plugin._VMAPHandler instanceof VMAPManager).toBeTruthy()
     expect(plugin._VASTHandler instanceof VASTManager).toBeTruthy()
   })
+
+  describe('requestAdBreaks method', () => {
+    test.todo('returns a promise')
+    test.todo('returns an AdBreaks list after the returned promise is resolved')
+    test.todo('returns one error after the returned promise is rejected')
+  })
+
+  describe('requestAds method', () => {
+    test.todo('returns a promise')
+    test.todo('returns an Ads list after the returned promise is resolved')
+    test.todo('returns one error after the returned promise is rejected')
+  })
 })
