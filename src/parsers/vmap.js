@@ -31,9 +31,9 @@ export default class VMAPManager {
   }
 
   /**
-   * Receives one VMAP formatted response and return a list of AdBreaks entities.
+   * Receives one VMAP formatted response and return a list of AdBreaks instances.
    * @param {Object} rawData VMAP formatted on JSON schema.
-   * @returns {Promises} An Array of all AdBreaks entities created or one error.
+   * @returns {Promises} An Array of all AdBreaks instances created or one error.
    */
   filterRawData(rawData) {
     return rawData['@version'] && rawData['vmap:AdBreak']
@@ -102,9 +102,9 @@ export default class VMAPManager {
   }
 
   /**
-   * Receives a adBreakConfig and return one AdBreaks entity.
+   * Receives a adBreakConfig and return one AdBreaks instance.
    * @param {Object} adBreakConfig
-   * @returns {Object} An AdBreak entity.
+   * @returns {Object} An AdBreak instance.
    */
   createAdBreak(adBreakConfig) {
     const formattedTimeOffset = adBreakConfig.timeOffset ? hmsToMilliseconds(adBreakConfig.timeOffset) : null
