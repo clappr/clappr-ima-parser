@@ -34,7 +34,7 @@ export default class IMAParserPlugin extends CorePlugin {
 
   /**
    * Get a list of ads available from the received AdBreak.
-   * @param {Object} adBreak An adBreak entity.
+   * @param {Object} adBreak An adBreak Instance.
    * @returns {Promise} Promise resolved with one array of current available ads of the respected AdBreak.
    */
   requestAds(adBreak) {
