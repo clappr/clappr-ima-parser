@@ -1,7 +1,7 @@
 module.exports = {
   verbose: true,
   transform: { '^.+\\.js$': 'babel-jest' },
-  collectCoverageFrom: ['src/*.js'],
+  collectCoverageFrom: ['src/*.js', 'src/*/*.js'],
   coverageThreshold: {
     global: {
       branches: 90,
