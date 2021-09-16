@@ -37,7 +37,7 @@ export default class IMAParserPlugin extends CorePlugin {
    * @param {Object} adBreak An adBreak entity.
    * @returns {Promise} Promise resolved with one array of current available ads of the respected AdBreak.
    */
-  requestAd(adBreak) {
+  requestAds(adBreak) {
     return this._VASTHandler.request(adBreak.adTag)
       .then(ad => {
         adBreak.addAd(ad)
