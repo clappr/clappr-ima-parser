@@ -10,7 +10,7 @@ export default class VASTManager {
 
   /**
    * Request VAST XML and returns one VASTResponse.Ad entity.
-   * @param adData Object that contains the url to fetch the VAST document.
+   * @param {Object} adData Contains the url to fetch the VAST document.
    * @returns {Promise} Promise resolved with one VASTResponse.Ad entity or one error.
    * @see {@link https://github.com/dailymotion/vast-client-js/blob/master/docs/api/class-reference.md#ad}
    */

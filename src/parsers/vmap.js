@@ -5,7 +5,7 @@ import { hmsToMilliseconds, xml2json } from '../utils/utils'
 export default class VMAPManager {
   /**
    * Request VMAP XML.
-   * @param URL ad server URL to request VMAP file.
+   * @param {String} URL ad server URL to request VMAP file.
    * @returns {Promise} Promise resolved with VMAP parsed to plain text or one error.
    */
   request(url) {
@@ -19,7 +19,7 @@ export default class VMAPManager {
 
   /**
    * Parses VMAP XML in plain text to JSON.
-   * @param responseInPlainText Response of the fetch triggered for consuming VMAP.
+   * @param {String} responseInPlainText Response of the fetch triggered for consuming VMAP.
    * @returns {Promise} Promise resolved with raw AdBreaks list.
    */
   process(responseInPlainText) {
@@ -32,7 +32,7 @@ export default class VMAPManager {
 
   /**
    * Receives one VMAP formatted response and return a list of AdBreaks entities.
-   * @param rawData VMAP formatted on JSON schema.
+   * @param {Object} rawData VMAP formatted on JSON schema.
    * @returns {Promises} An Array of all AdBreaks entities created or one error.
    */
   filterRawData(rawData) {
@@ -103,7 +103,7 @@ export default class VMAPManager {
 
   /**
    * Receives a adBreakConfig and return one AdBreaks entity.
-   * @param adBreakConfig
+   * @param {Object} adBreakConfig
    * @returns {Object} An AdBreak entity.
    */
   createAdBreak(adBreakConfig) {
