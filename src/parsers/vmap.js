@@ -44,7 +44,12 @@ export default class VMAPManager {
     const adBreaks = []
 
     try {
-      rawData['vmap:AdBreak'].forEach(item => {
+      // Formatting all ad breaks with same structure to simplify manipulations.
+      const vmapAdBreaks = Array.isArray(rawData['vmap:AdBreak'])
+        ? rawData['vmap:AdBreak']
+        : [rawData['vmap:AdBreak']]
+
+      vmapAdBreaks.forEach(item => {
         let timeOffset = item['@timeOffset']
         let category = ''
 
