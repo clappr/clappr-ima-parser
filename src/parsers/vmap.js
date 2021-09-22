@@ -32,7 +32,7 @@ export default class VMAPManager {
   /**
    * Receives one VMAP formatted response and return a list of AdBreaks instances.
    * @param {Object} rawData VMAP formatted on JSON schema.
-   * @returns {Promises} An Array of all AdBreaks instances created or one error.
+   * @returns {Array} All AdBreaks instances created or one error.
    */
   filterRawData(rawData) {
     return rawData['@version'] && rawData['vmap:AdBreak']
@@ -71,7 +71,7 @@ export default class VMAPManager {
       return Promise.reject(error)
     }
 
-    return Promise.all(adBreaks)
+    return adBreaks
   }
 
   _filterCustomRawData(rawData) {
@@ -97,7 +97,7 @@ export default class VMAPManager {
       return Promise.reject(error)
     }
 
-    return Promise.all(adBreaks)
+    return adBreaks
   }
 
   /**
