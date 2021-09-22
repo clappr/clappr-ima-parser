@@ -17,8 +17,6 @@ export default class VASTManager {
   request(adData) {
     return adData
       ? this._processAdData(adData)
-        .then(ads => ads)
-        .catch(error => Promise.reject(error))
       : Promise.reject('Invalid adTag received to request VAST')
   }
 
@@ -29,14 +27,11 @@ export default class VASTManager {
     const editedAdUrl = formattedAdBreakContent['#cdata'].replace(/[\s\n]+/, '')
 
     return this._requestVASTAdInformation(editedAdUrl)
-      .then(arrayResults => arrayResults)
-      .catch(error => Promise.reject(error))
   }
 
   _requestVASTAdInformation(adUrl) {
     return this.client.get(adUrl, { wrapperLimit: 5, withCredentials: true, resolveAll: false })
       .then(response => this._filterOrGetNextAds(response))
-      .catch(error => Promise.reject(error))
   }
 
   _filterOrGetNextAds(response) {
@@ -46,104 +41,10 @@ export default class VASTManager {
 
     // TODO: support for ad pods (n ads)
     const hasMediaFiles = ads[0].creatives.some(creative => creative.mediaFiles)
-    if (!ads[0].creatives || !hasMediaFiles)
-      return this.client.hasRemainingAds() && this.client.getNextAds()
-        .then(response => this._filterOrGetNextAds(response))
-        .catch(error => Promise.reject(error))
+    if ((!ads[0].creatives || !hasMediaFiles) && this.client.hasRemainingAds())
+      return this.client.getNextAds().then(response => this._filterOrGetNextAds(response))
 
     return ads[0]
     // TODO: support for ad pods (n ads)
   }
-
-  // filterAdCreatives(data) {
-  //   return new Promise((resolve, reject) => {
-  //     if (data && data.creatives) {
-  //       const creativePromises = data.creatives.map(creative => this.diFude(creative))
-
-  //       Promise.race(creativePromises)
-  //         .then(data => resolve(data))
-  //         .catch(error => reject(error))
-  //     } else {
-  //       reject('No data.creatives')
-  //     }
-  //   })
-  // }
-
-  // diFude(creative) {
-  //   return new Promise((resolve, reject) => {
-  //     if (creative.mediaFiles) {
-  //       const progressivePromises = []
-  //       const adaptivePromises = []
-
-  //       this.createMediaFiles(creative.mediaFiles, progressivePromises, adaptivePromises)
-
-  //       if (progressivePromises.length === 0) progressivePromises.push(Promise.resolve())
-  //       if (adaptivePromises.length === 0) adaptivePromises.push(Promise.resolve())
-
-  //       Promise.all([
-  //         Promise.race(progressivePromises),
-  //         Promise.race(adaptivePromises),
-  //       ]).then(([progressive, adaptive]) => {
-  //         const skipOffset = creative.skipDelay // hmsToMilliseconds(creative.skipDelay)
-  //         const ad = new Ad(skipOffset * 1000) // convert to ms
-  //         if (progressive) ad.setProgressive(progressive)
-  //         if (adaptive) ad.setAdaptive(adaptive)
-  //         if (progressive || adaptive) {
-  //           ad.setCreative(creative)
-  //           resolve(ad)
-  //         } else {
-  //           reject()
-  //         }
-  //       }).catch(error => reject(error))
-  //     } else {
-  //       reject('No creative.mediaFiles')
-  //     }
-  //   })
-  // }
-
-  // createMediaFiles(mediaFiles, progressivePromises, adaptivePromises) {
-  //   for (let j = 0; j < mediaFiles.length; j++) {
-  //     const mediaFile = mediaFiles[j]
-  //     if (mediaFile.mimeType) {
-  //       const parsedMedia = { media: mediaFile.fileURL, bitrate: mediaFile.bitrate, type: mediaFile.mimeType }
-
-  //       switch (mediaFile.mimeType) {
-  //       case 'video/webm':
-  //       case 'video/3gpp':
-  //       case 'video/mp4':
-  //         progressivePromises.push(Promise.resolve(new MediaFile(parsedMedia)))
-  //         break
-  //       case 'application/x-mpegURL':
-  //       case 'application/vnd.apple.mpegurl': {
-  //         adaptivePromises.push(new Promise(resolve => {
-  //           this.validateHLS(mediaFile.fileURL)
-  //             .then(() => resolve(new MediaFile(parsedMedia)))
-  //             .catch(() => resolve())
-  //         }))
-  //         break
-  //       }
-  //       // Disable by now, it's producing errors on WebOS
-  //       case 'application/dash+xml':
-  //       default:
-  //         // adaptivePromises.push(new MediaFile(parsedMedia))
-  //         break
-  //       }
-  //     }
-  //   }
-  // }
-
-  // validateHLS(url) {
-  //   console.log('>>>>>> validateHLS() with URL: ', url)
-  //   return fetch(url, { mode: 'no-cors', credentials: 'omit' })
-  //     .then(response => response.text())
-  //     .then(text => {
-  //       if (text && text.indexOf)
-  //         return text.indexOf('#EXT-X-VERSION:3') >= 0
-  //           ? Promise.resolve()
-  //           : Promise.reject('HLS version not compatible')
-
-  //       return Promise.reject()
-  //     })
-  //     .catch(error => error)
-  // }
 }

@@ -14,7 +14,6 @@ export default class VMAPManager {
         if (!response.ok) throw new Error('Network response was not ok')
         return response.text()
       })
-      .catch(error => Promise.reject(error))
   }
 
   /**
