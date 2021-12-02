@@ -20,7 +20,6 @@ export default class IMAParserPlugin extends CorePlugin {
    */
   requestAdBreaks(url) {
     return this._VMAPHandler.request(url)
-      .then(xmlPlainText => this._VMAPHandler.process(xmlPlainText))
       .then(rawAdBreak => this._VMAPHandler.filterRawData(rawAdBreak))
       .then(adBreaks => {
         Log.info(this.name, 'Available adBreaks: ', adBreaks)

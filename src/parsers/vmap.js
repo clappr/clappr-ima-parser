@@ -4,29 +4,23 @@ import { hmsToMilliseconds, xml2json } from '../utils'
 
 export default class VMAPManager {
   /**
-   * Request VMAP XML.
+   * Request VMAP XML and parses to JSON.
    * @param {String} URL ad server URL to request VMAP file.
-   * @returns {Promise} Promise resolved with VMAP parsed to plain text or one error.
+   * @returns {Promise} Promise resolved with raw AdBreaks list or one error.
    */
   request(url) {
     return fetch(url)
       .then(response => {
         if (!response.ok) throw new Error('Network response was not ok')
+
         return response.text()
+      }).then(responseInPlainText => {
+        const parser = new DOMParser()
+        const xml = parser.parseFromString(responseInPlainText, 'application/xml')
+        const rawAdBreaks = xml2json(xml.documentElement)
+
+        return rawAdBreaks
       })
-  }
-
-  /**
-   * Parses VMAP XML in plain text to JSON.
-   * @param {String} responseInPlainText Response of the fetch triggered for consuming VMAP.
-   * @returns {Promise} Promise resolved with raw AdBreaks list.
-   */
-  process(responseInPlainText) {
-    const parser = new DOMParser()
-    const xml = parser.parseFromString(responseInPlainText, 'application/xml')
-    const rawAdBreaks = xml2json(xml.documentElement)
-
-    return Promise.resolve(rawAdBreaks)
   }
 
   /**
