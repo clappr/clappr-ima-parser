@@ -7,7 +7,7 @@ import IMAParserPlugin from './ima-parser'
 import VMAPManager from './parsers/vmap'
 import VASTManager from './parsers/vast'
 import AdBreak from './entities/ad-break'
-import { parsedVMAPMock } from './mocks/valid-vmap'
+import { standardParsedVMAPMock } from './mocks/valid-vmap'
 
 const setupTest = (options = {}) => {
   const core = new Core(options)
@@ -41,7 +41,7 @@ describe('IMAParserPlugin', () => {
   describe('requestAdBreaks method', () => {
     test('returns a promise', () => {
       const { plugin } = setupTest()
-      jest.spyOn(plugin._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(parsedVMAPMock)))
+      jest.spyOn(plugin._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(standardParsedVMAPMock)))
       const result = plugin.requestAdBreaks('https://server.com/vmap')
 
       expect(result instanceof Promise).toBeTruthy()
@@ -49,7 +49,7 @@ describe('IMAParserPlugin', () => {
 
     test('returns an AdBreaks list after the returned promise is resolved', done => {
       const { plugin } = setupTest()
-      jest.spyOn(plugin._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(parsedVMAPMock)))
+      jest.spyOn(plugin._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(standardParsedVMAPMock)))
 
       plugin.requestAdBreaks('https://server.com/vmap')
         .then(result => {
