@@ -32,13 +32,13 @@ describe('VASTManager', () => {
     test('returns a promise for a valid received adData', () => {
       const VASTHandler = new VASTManager()
 
-      jest.spyOn(VASTHandler, '_requestVASTAdInformation').mockImplementation(() => new Promise())
+      jest.spyOn(VASTHandler, '_requestVASTAdInformation').mockImplementation(() => new Promise(resolve => resolve()))
 
-      let response = VASTHandler.request({ '#cdata': 'https://ad-server.com/test' })
+      let response = VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })
 
       expect(response instanceof Promise).toBeTruthy()
 
-      response = VASTHandler.request([{ '#cdata': 'https://ad-server.com/test' }])
+      response = VASTHandler.request([{ '#cdata': 'https://ad-server.com/test?vad_type=linear' }])
 
       expect(response instanceof Promise).toBeTruthy()
     })
