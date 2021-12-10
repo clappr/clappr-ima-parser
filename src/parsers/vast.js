@@ -23,7 +23,7 @@ export default class VASTManager {
   _processAdData(adBreakContent) {
     const formattedAdBreakContent = Array.isArray(adBreakContent) ? adBreakContent[0] : adBreakContent
 
-    if (!/vad_type=linear/.test(formattedAdBreakContent['#cdata'])) throw new Error('Invalid ads')
+    if (!/vad_type=linear/.test(formattedAdBreakContent['#cdata'])) return Promise.reject('Invalid ads')
     const editedAdUrl = formattedAdBreakContent['#cdata'].replace(/[\s\n]+/, '')
 
     return this._requestVASTAdInformation(editedAdUrl)
@@ -37,7 +37,7 @@ export default class VASTManager {
   _filterOrGetNextAds(response) {
     const { ads } = response
 
-    if (ads.length === 0) throw new Error('Empty ads')
+    if (!ads || ads.length === 0) throw new Error('Empty ads')
 
     // TODO: support for ad pods (n ads)
     const hasMediaFiles = ads[0].creatives.some(creative => creative.mediaFiles)
