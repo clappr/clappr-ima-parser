@@ -1,5 +1,6 @@
 module.exports = {
   verbose: true,
+  resolver: 'jest-directory-named-resolver',
   transform: { '^.+\\.js$': 'babel-jest' },
   collectCoverageFrom: [
     'src/*.js',
