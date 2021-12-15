@@ -1,7 +1,7 @@
 import { Log } from '@clappr/core'
-import { hmsToMilliseconds } from '../../utils/str-to-time'
-import AdBreak from '../../entities/ad-break'
-import xml2json from '../../converts/xml2json'
+import { hmsToMilliseconds } from '@/utils/str-to-time'
+import AdBreak from '@/entities/ad-break'
+import xml2json from '@/converts/xml2json'
 
 export default class VMAPManager {
   /**

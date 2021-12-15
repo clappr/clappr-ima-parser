@@ -3,8 +3,8 @@
  */
 
 import VMAPManager from './vmap'
-import AdBreak from '../../entities/ad-break'
-import { customParsedVMAPMock, standardParsedVMAPMock } from '../../mocks/valid-vmap'
+import AdBreak from '@/entities/ad-break'
+import { customParsedVMAPMock, standardParsedVMAPMock } from '@/mocks/valid-vmap'
 
 describe('VMAPManager', () => {
   afterEach(() => { fetch.mockClear() })
