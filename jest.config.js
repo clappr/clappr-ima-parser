@@ -2,6 +2,7 @@ module.exports = {
   verbose: true,
   resolver: 'jest-directory-named-resolver',
   transform: { '^.+\\.js$': 'babel-jest' },
+  moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   collectCoverageFrom: [
     'src/*.js',
     'src/*/*.js',
