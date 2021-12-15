@@ -1,4 +1,5 @@
 import { createBabelInputPluginFactory } from '@rollup/plugin-babel'
+import alias from '@rollup/plugin-alias'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import serve from 'rollup-plugin-serve'
@@ -13,8 +14,10 @@ import babelConfig from './babel.config.json'
 const babelPluginForUMDBundle = createBabelInputPluginFactory()
 const babelPluginForESMBundle = createBabelInputPluginFactory()
 const babelPluginOptions = { ...babelConfig, exclude: 'node_modules/**', babelHelpers: 'bundled' }
+const aliasPluginOptions = { entries: { '@': `${__dirname}/src` } }
 
 const plugins = [
+  alias(aliasPluginOptions),
   namedDirectory(),
   size(),
   filesize(),
