@@ -15,4 +15,6 @@ export const hmsToMilliseconds = adsTimeOffset => {
       + parseInt(values[1], 10) * MINUTES_TO_MILLISECONDS
       + parseInt(values[0], 10) * HOURS_TO_MILLISECONDS
   }
+
+  return null
 }
