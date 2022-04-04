@@ -1,14 +1,9 @@
-import { CorePlugin, Log, version } from '@clappr/core'
+import { Log } from '@clappr/core'
 import VMAPManager from './parsers/vmap'
 import VASTManager from './parsers/vast'
 
-export default class IMAParserPlugin extends CorePlugin {
-  get name() { return 'ima_parser' }
-
-  get supportedVersion() { return { min: version } }
-
-  constructor(core) {
-    super(core)
+export default class IMAParser {
+  constructor() {
     this._VMAPHandler = new VMAPManager()
     this._VASTHandler = new VASTManager()
   }

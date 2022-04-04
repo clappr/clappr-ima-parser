@@ -1,17 +1,17 @@
 {
-  "name": "@clappr/ima-parser-plugin",
+  "name": "@clappr/ima-parser",
   "version": "1.0.0",
-  "description": "A Clappr plugin to communicate with IMA and play ads.",
+  "description": "A Lib to communicate with IMA and play ads.",
   "keywords": [
     "clappr",
-    "plugin",
+    "lib",
     "ads",
     "IMA",
     "advertisement"
   ],
-  "homepage": "https://github.com/clappr/clappr-ima-parser-plugin",
+  "homepage": "https://github.com/clappr/clappr-ima-parser",
   "bugs": {
-    "url": "https://github.com/clappr/clappr-ima-parser-plugin/issues",
+    "url": "https://github.com/clappr/clappr-ima-parser/issues",
     "email": "player-web@g.globo"
   },
   "license": "BSD-3-Clause",
@@ -24,11 +24,11 @@
     "/src"
   ],
   "source": "src/ima-parser.js",
-  "main": "dist/clappr-ima-parser-plugin.js",
-  "module": "dist/clappr-ima-parser-plugin.esm.js",
+  "main": "dist/clappr-ima-parser.js",
+  "module": "dist/clappr-ima-parser.esm.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr-ima-parser-plugin.git"
+    "url": "git@github.com:clappr/clappr-ima-parser.git"
   },
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config",

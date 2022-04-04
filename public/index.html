@@ -24,7 +24,7 @@ var player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
   poster: 'http://clappr.io/poster.png',
   playback: { controls: true },
-  plugins: [window.IMAParserPlugin],
+  plugins: [window.IMAParser],
 });
 
 player.attachTo(playerElement);
@@ -37,7 +37,7 @@ player.attachTo(playerElement);
     <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js" defer></script>
     <script type="text/javascript" charset="utf-8" src="https://pagecdn.io/lib/ace/1.4.12/ace.js" defer></script>
     <script type="text/javascript" charset="utf-8" src="javascript/main.js" defer></script>
-    <script type="text/javascript" charset="utf-8" src="clappr-ima-parser-plugin.js" defer></script>
+    <script type="text/javascript" charset="utf-8" src="clappr-ima-parser.js" defer></script>
     <script type="text/javascript" charset="utf-8" src="javascript/clappr-config.js" defer></script>
   </body>
 </html>

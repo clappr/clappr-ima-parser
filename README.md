@@ -1,2 +1,2 @@
-# clappr-ima-parser-plugin
-A Clappr plugin to communicate with IMA and play ads
+# clappr-ima-parser
+A Lib to communicate with IMA and play ads

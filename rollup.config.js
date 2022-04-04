@@ -30,14 +30,14 @@ const mainBundle = {
   external: ['@clappr/core'],
   output: [
     {
-      name: 'IMAParserPlugin',
+      name: 'IMAParser',
       file: pkg.main,
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
     },
     !!process.env.MINIMIZE && {
-      name: 'IMAParserPlugin',
-      file: 'dist/clappr-ima-parser-plugin.min.js',
+      name: 'IMAParser',
+      file: 'dist/clappr-ima-parser.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       plugins: terser(),
@@ -50,7 +50,7 @@ const esmBundle = {
   input: 'src/ima-parser.js',
   external: ['@clappr/core', /@babel\/runtime/],
   output: {
-    name: 'IMAParserPlugin',
+    name: 'IMAParser',
     file: pkg.module,
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
