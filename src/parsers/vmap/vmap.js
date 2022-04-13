@@ -57,11 +57,11 @@ export default class VMAPManager {
           category = 'midroll'
         }
 
-        const adBreak = this.formatTimeOffset({
+        const adBreak = {
           category,
           adTag: item['vmap:AdSource']['vmap:AdTagURI'],
-          timeOffset,
-        })
+          timeOffset: this.formatTimeOffset(timeOffset)
+        }
 
         adBreaks.push(adBreak)
       })
@@ -83,11 +83,13 @@ export default class VMAPManager {
         // Formatting all ad breaks with same structure to simplify manipulations.
         adData = Array.isArray(adData) ? adData : [adData]
 
-        const adBreak = adData.map(content => this.formatTimeOffset({
-          category,
-          adTag: content.Ad,
-          timeOffset: content['@timeOffset'],
-        }))
+        const adBreak = adData.map(content => {
+          return {
+            category,
+            adTag: content.Ad,
+            timeOffset: this.formatTimeOffset(content['@timeOffset'])
+          }
+        })
 
         adBreaks.push(...adBreak)
       }
@@ -104,9 +106,7 @@ export default class VMAPManager {
    * @param {Object} adBreakConfig
    * @returns {Object} adBreakConfig
    */
-   formatTimeOffset(adBreakConfig) {
-    const formattedTimeOffset = adBreakConfig.timeOffset ? hmsToMilliseconds(adBreakConfig.timeOffset) : null
-    adBreakConfig.timeOffset = formattedTimeOffset
-    return adBreakConfig
+   formatTimeOffset(timeOffset) {
+    return timeOffset ? hmsToMilliseconds(timeOffset) : null
   }
 }
