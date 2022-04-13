@@ -5,7 +5,6 @@
 import IMAParser from './ima-parser'
 import VMAPManager from './parsers/vmap'
 import VASTManager from './parsers/vast'
-import AdBreak from './entities/ad-break'
 import { standardParsedVMAPMock } from './mocks/valid-vmap'
 
 describe('IMAParser', () => {
@@ -31,7 +30,7 @@ describe('IMAParser', () => {
 
       imaParser.requestAdBreaks('https://server.com/vmap')
         .then(result => {
-          expect(result[0] instanceof AdBreak).toBeTruthy()
+          expect(Object.keys(result[0])).toEqual([ 'category', 'adTag', 'timeOffset' ])
           done()
         })
     })
@@ -48,20 +47,18 @@ describe('IMAParser', () => {
   })
 
   describe('requestAds method', () => {
-    const adBreakConfigMock = { category: 'preroll', timeOffset: 1000, adTag: {} }
-
     test('returns a promise', () => {
       const imaParser = new IMAParser()
-      const adBreakMock = new AdBreak(adBreakConfigMock)
+      const adBreakMock = { category: 'preroll', timeOffset: 1000, adTag: {} }
       jest.spyOn(imaParser._VASTHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve()))
-      const result = imaParser.requestAds(adBreakMock)
+      const result = imaParser.requestAds(adBreakMock.adTag)
 
       expect(result instanceof Promise).toBeTruthy()
     })
 
     test('returns one error after the returned promise is rejected', done => {
       const imaParser = new IMAParser()
-      imaParser.requestAds({})
+      imaParser.requestAds()
         .catch(error => {
           expect(error).toEqual('Invalid adTag received to request VAST')
           done()

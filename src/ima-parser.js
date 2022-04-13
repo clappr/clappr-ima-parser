@@ -27,16 +27,14 @@ export default class IMAParser {
   }
 
   /**
-   * Get a list of ads available from the received AdBreak.
-   * @param {Object} adBreak An adBreak Instance.
-   * @returns {Promise} Promise resolved with one array of current available ads of the respected AdBreak.
+   * Get a list of ads available from the received Ad tag.
+   * @param {Object} adTag  Ad tag URL to fetch VAST.
+   * @returns {Promise} Promise resolved with current available ads of the respected Ad tag.
    */
-  requestAds(adBreak) {
-    return this._VASTHandler.request(adBreak.adTag)
+  requestAds(adTag) {
+    return this._VASTHandler.request(adTag)
       .then(ad => {
-        adBreak.addAd(ad)
-        Log.info('AdBreak', 'Added to ads list: ', adBreak.ads[adBreak.ads.length - 1])
-        return adBreak.ads
+        return ad
       })
       .catch(error => Promise.reject(error))
   }
