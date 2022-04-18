@@ -1,6 +1,5 @@
 import { Log } from '@clappr/core'
 import { hmsToMilliseconds } from '@/utils/str-to-time'
-import AdBreak from '@/entities/ad-break'
 import xml2json from '@/converts/xml2json'
 
 export default class VMAPManager {
@@ -58,11 +57,11 @@ export default class VMAPManager {
           category = 'midroll'
         }
 
-        const adBreak = this.createAdBreak({
+        const adBreak = {
           category,
           adTag: item['vmap:AdSource']['vmap:AdTagURI'],
-          timeOffset,
-        })
+          timeOffset: this.formatTimeOffset(timeOffset)
+        }
 
         adBreaks.push(adBreak)
       })
@@ -84,11 +83,13 @@ export default class VMAPManager {
         // Formatting all ad breaks with same structure to simplify manipulations.
         adData = Array.isArray(adData) ? adData : [adData]
 
-        const adBreak = adData.map(content => this.createAdBreak({
-          category,
-          adTag: content.Ad,
-          timeOffset: content['@timeOffset'],
-        }))
+        const adBreak = adData.map(content => {
+          return {
+            category,
+            adTag: content.Ad,
+            timeOffset: this.formatTimeOffset(content['@timeOffset'])
+          }
+        })
 
         adBreaks.push(...adBreak)
       }
@@ -101,13 +102,11 @@ export default class VMAPManager {
   }
 
   /**
-   * Receives a adBreakConfig and return one AdBreaks instance.
+   * Receives and return adBreakConfig
    * @param {Object} adBreakConfig
-   * @returns {Object} An AdBreak instance.
+   * @returns {Object} adBreakConfig
    */
-  createAdBreak(adBreakConfig) {
-    const formattedTimeOffset = adBreakConfig.timeOffset ? hmsToMilliseconds(adBreakConfig.timeOffset) : null
-    adBreakConfig.timeOffset = formattedTimeOffset
-    return new AdBreak(adBreakConfig)
+   formatTimeOffset(timeOffset) {
+    return timeOffset ? hmsToMilliseconds(timeOffset) : null
   }
 }

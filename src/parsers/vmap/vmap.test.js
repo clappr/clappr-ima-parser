@@ -3,7 +3,6 @@
  */
 
 import VMAPManager from './vmap'
-import AdBreak from '@/entities/ad-break'
 import { customParsedVMAPMock, standardParsedVMAPMock } from '@/mocks/valid-vmap'
 
 describe('VMAPManager', () => {
@@ -34,9 +33,9 @@ describe('VMAPManager', () => {
       const response = VASTHandler.filterRawData(standardParsedVMAPMock)
 
       expect(response.length).toEqual(3)
-      expect(response[0] instanceof AdBreak).toBeTruthy()
-      expect(response[1] instanceof AdBreak).toBeTruthy()
-      expect(response[2] instanceof AdBreak).toBeTruthy()
+      expect(Object.keys(response[0])).toEqual([ 'category', 'adTag', 'timeOffset' ])
+      expect(Object.keys(response[1])).toEqual([ 'category', 'adTag', 'timeOffset' ])
+      expect(Object.keys(response[2])).toEqual([ 'category', 'adTag', 'timeOffset' ])
     })
 
     test('supports IAB VMAP format', () => {
