@@ -34,17 +34,20 @@ export default class VASTManager {
       .then(response => this._filterOrGetNextAds(response))
   }
 
-  _filterOrGetNextAds(response) {
+  _filterOrGetNextAds(response, adsToReturn = []) {
     const { ads } = response
 
     if (!ads || ads.length === 0) throw new Error('Empty ads')
 
-    // TODO: support for ad pods (n ads)
-    const hasMediaFiles = ads[0].creatives.some(creative => creative.mediaFiles)
-    if ((!ads[0].creatives || !hasMediaFiles) && this.client.hasRemainingAds())
-      return this.client.getNextAds().then(response => this._filterOrGetNextAds(response))
+    ads.forEach(ad => {
+      const hasMediaFiles = ad.creatives && ad.creatives.some(creative => creative.mediaFiles)
+      if (!hasMediaFiles && this.client.hasRemainingAds()) {
+        this.client.getNextAds().then(response => this._filterOrGetNextAds(response, adsToReturn))
+      } else {
+        adsToReturn.push(ad)
+      }
+    })
 
-    return ads[0]
-    // TODO: support for ad pods (n ads)
+    return adsToReturn
   }
 }
