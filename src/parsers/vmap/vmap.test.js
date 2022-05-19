@@ -18,11 +18,11 @@ describe('VMAPManager', () => {
       expect(response instanceof Promise).toBeTruthy()
     })
 
-    test('throws one error if receives a invalid URL', () => {
+    test('throws one error if receives a invalid URL', async () => {
       global.fetch = jest.fn(() => new Promise((_, reject) => reject('Network response was not ok')))
       const VASTHandler = new VMAPManager()
 
-      expect(VASTHandler.request('https://invali-ad-server.com/test')).rejects.toMatch('Network response was not ok')
+      await expect(VASTHandler.request('https://invali-ad-server.com/test')).rejects.toMatch('Network response was not ok')
     })
   })
 
@@ -54,18 +54,18 @@ describe('VMAPManager', () => {
       expect(Array.isArray(response[0].adTag)).not.toHaveProperty('@templateType')
     })
 
-    test('returns a rejected promise for IAB VMAP format decode errors', () => {
+    test('returns a rejected promise for IAB VMAP format decode errors', async () => {
       const VASTHandler = new VMAPManager()
       const invalidStandardVMAP = standardParsedVMAPMock
       invalidStandardVMAP['vmap:AdBreak'] = 'invalid'
 
-      expect(VASTHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow('Cannot read property \'vmap:AdTagURI\' of undefined')
+      await expect(VASTHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow('Cannot read property \'vmap:AdTagURI\' of undefined')
     })
 
-    test('returns a rejected promise for Custom VMAP format decode errors', () => {
+    test('returns a rejected promise for Custom VMAP format decode errors', async () => {
       const VASTHandler = new VMAPManager()
 
-      expect(VASTHandler.filterRawData({ p: null, q: null })).rejects.toThrow('Cannot read property \'Ad\' of null')
+      await expect(VASTHandler.filterRawData({ p: null, q: null })).rejects.toThrow('Cannot read property \'Ad\' of null')
     })
   })
 })
