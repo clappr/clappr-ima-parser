@@ -21,12 +21,23 @@ export default class VASTManager {
   }
 
   _processAdData(adBreakContent) {
-    const formattedAdBreakContent = Array.isArray(adBreakContent) ? adBreakContent[0] : adBreakContent
+    const formattedAdBreakContent = Array.isArray(adBreakContent) ? adBreakContent : [adBreakContent]
+    const promises = []
 
-    if (!/vad_type=linear/.test(formattedAdBreakContent['#cdata'])) return Promise.reject('Invalid ads')
-    const editedAdUrl = formattedAdBreakContent['#cdata'].replace(/[\s\n]+/, '')
+    formattedAdBreakContent.forEach(adUrl => {
+        adUrl = adUrl['#cdata'].replace(/[\s\n]+/, '')
+        promises.push(this._requestVASTAdInformation(adUrl))
+    })
 
-    return this._requestVASTAdInformation(editedAdUrl)
+    return Promise.all(promises.map(promise => promise.catch(error => {
+      return error
+    }))).then(results => {
+      const ads = []
+      results.forEach(adsList => {
+        adsList instanceof Array && ads.push(...adsList)
+      })
+      return ads
+    })
   }
 
   _requestVASTAdInformation(adUrl) {
