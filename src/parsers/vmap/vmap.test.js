@@ -9,7 +9,7 @@ describe('VMAPManager', () => {
   afterEach(() => { fetch.mockClear() })
 
   describe('request method', () => {
-    test('returns a promise', () => {
+    it('returns a promise', () => {
       global.fetch = jest.fn(() => new Promise(resolve => resolve({ ok: 200, text: () => {} })))
 
       const VASTHandler = new VMAPManager()
@@ -18,16 +18,16 @@ describe('VMAPManager', () => {
       expect(response instanceof Promise).toBeTruthy()
     })
 
-    test('throws one error if receives a invalid URL', () => {
+    it('throws one error if receives a invalid URL', async () => {
       global.fetch = jest.fn(() => new Promise((_, reject) => reject('Network response was not ok')))
       const VASTHandler = new VMAPManager()
 
-      expect(VASTHandler.request('https://invali-ad-server.com/test')).rejects.toMatch('Network response was not ok')
+      await expect(VASTHandler.request('https://invali-ad-server.com/test')).rejects.toMatch('Network response was not ok')
     })
   })
 
   describe('filterRawData method', () => {
-    test('returns one array with AdBreaks', () => {
+    it('returns one array with AdBreaks', () => {
       const VASTHandler = new VMAPManager()
 
       const response = VASTHandler.filterRawData(standardParsedVMAPMock)
@@ -38,7 +38,7 @@ describe('VMAPManager', () => {
       expect(Object.keys(response[2])).toEqual([ 'category', 'adTag', 'timeOffset' ])
     })
 
-    test('supports IAB VMAP format', () => {
+    it('supports IAB VMAP format', () => {
       const VASTHandler = new VMAPManager()
 
       const response = VASTHandler.filterRawData(standardParsedVMAPMock)
@@ -46,7 +46,7 @@ describe('VMAPManager', () => {
       expect(response[0].adTag).toHaveProperty('@templateType')
     })
 
-    test('supports Custom VMAP format', () => {
+    it('supports Custom VMAP format', () => {
       const VASTHandler = new VMAPManager()
 
       const response = VASTHandler.filterRawData(customParsedVMAPMock)
@@ -54,18 +54,18 @@ describe('VMAPManager', () => {
       expect(Array.isArray(response[0].adTag)).not.toHaveProperty('@templateType')
     })
 
-    test('returns a rejected promise for IAB VMAP format decode errors', () => {
+    it('returns a rejected promise for IAB VMAP format decode errors', async () => {
       const VASTHandler = new VMAPManager()
       const invalidStandardVMAP = standardParsedVMAPMock
       invalidStandardVMAP['vmap:AdBreak'] = 'invalid'
 
-      expect(VASTHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow('Cannot read property \'vmap:AdTagURI\' of undefined')
+      await expect(VASTHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow('Cannot read property \'vmap:AdTagURI\' of undefined')
     })
 
-    test('returns a rejected promise for Custom VMAP format decode errors', () => {
+    it('returns a rejected promise for Custom VMAP format decode errors', async () => {
       const VASTHandler = new VMAPManager()
 
-      expect(VASTHandler.filterRawData({ p: null, q: null })).rejects.toThrow('Cannot read property \'Ad\' of null')
+      await expect(VASTHandler.filterRawData({ p: null, q: null })).rejects.toThrow('Cannot read property \'Ad\' of null')
     })
   })
 })

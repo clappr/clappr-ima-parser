@@ -2,14 +2,14 @@ import VASTManager from './vast'
 import { VASTClient } from 'vast-client'
 
 describe('VASTManager', () => {
-  test('creates one VASTClient instance when is built', () => {
+  it('creates one VASTClient instance when is built', () => {
     const VASTHandler = new VASTManager()
 
     expect(VASTHandler.client instanceof VASTClient).toBeTruthy()
   })
 
   describe('request method', () => {
-    test('returns one error for no adData received', done => {
+    it('returns one error for no adData received', done => {
       const VASTHandler = new VASTManager()
 
       VASTHandler.request()
@@ -19,7 +19,7 @@ describe('VASTManager', () => {
         })
     })
 
-    test('returns one error for invalid adData received', done => {
+    it('returns one error for invalid adData received', done => {
       const VASTHandler = new VASTManager()
 
       VASTHandler.request({})
@@ -29,35 +29,35 @@ describe('VASTManager', () => {
         })
     })
 
-    test('returns a promise for a valid received adData', () => {
+    it('returns a promise for a valid received adData', async () => {
       const VASTHandler = new VASTManager()
 
       jest.spyOn(VASTHandler, '_requestVASTAdInformation').mockImplementation(() => new Promise(resolve => resolve()))
 
       let response = VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })
 
-      expect(response instanceof Promise).toBeTruthy()
+      await expect(response instanceof Promise).toBeTruthy()
 
       response = VASTHandler.request([{ '#cdata': 'https://ad-server.com/test?vad_type=linear' }])
 
-      expect(response instanceof Promise).toBeTruthy()
+      await expect(response instanceof Promise).toBeTruthy()
     })
 
-    test('returns one error for invalid ads response', () => {
+    it('returns one error for invalid ads response', async () => {
       const VASTHandler = new VASTManager()
 
       jest.spyOn(VASTHandler.client, 'get').mockImplementationOnce(() => new Promise(resolve => resolve({})))
 
-      expect(VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })).rejects.toThrow('Empty ads')
+      await expect(VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })).rejects.toThrow('Empty ads')
     })
 
-    test('returns the ad content after the promise is resolved', () => {
+    test('returns the ad content after the promise is resolved', async () => {
       const VASTHandler = new VASTManager()
-      const responseMock = { ads: [{ creatives: [{ mediaFiles: {} }] }] }
+      const responseMock = { ads: [{ creatives: [{ mediaFiles: {} }] }, { creatives: [{ mediaFiles: {} }] }] }
 
       jest.spyOn(VASTHandler.client, 'get').mockImplementationOnce(() => new Promise(resolve => resolve(responseMock)))
 
-      expect(VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })).resolves.toEqual(responseMock.ads[0])
+      await expect(VASTHandler.request({ '#cdata': 'https://ad-server.com/test?vad_type=linear' })).resolves.toEqual(responseMock.ads)
     })
   })
 })
