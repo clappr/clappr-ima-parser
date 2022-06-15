@@ -1,5 +1,5 @@
 import { VASTClient } from 'vast-client'
-
+import AdBreak from './adbreak'
 export default class VASTManager {
   /**
    * Initialize a new VastManager instance with one VASTClient lib instance.
@@ -21,33 +21,31 @@ export default class VASTManager {
   }
 
   _processAdData(adBreakContent) {
-    const formattedAdBreakContent = Array.isArray(adBreakContent) ? adBreakContent : [adBreakContent]
-    const promises = []
+    const adBreak = new AdBreak(adBreakContent)
+    const vastRequests = []
 
-    formattedAdBreakContent.forEach(adUrl => {
-        adUrl = adUrl['#cdata'].replace(/[\s\n]+/, '')
-        promises.push(this._requestVASTAdInformation(adUrl))
+    adBreak.adDataUrls.forEach(adUrl => {
+        vastRequests.push(this._requestVASTAdInformation(adUrl))
     })
 
-    return Promise.all(promises.map(promise => promise.catch(error => {
-      return error
-    }))).then(results => {
-      const ads = []
-      results.forEach(adsList => {
-        adsList instanceof Array && ads.push(...adsList)
-      })
+    return Promise.all(vastRequests).then(this._getAdsFromVast)
+  }
+
+  _getAdsFromVast(vastRequestsResult) {
+    return vastRequestsResult.reduce((ads, adsList) => {
+      Array.isArray(adsList) && ads.push(...adsList)
       return ads
-    })
+    }, [])
   }
 
   _requestVASTAdInformation(adUrl) {
     return this.client.get(adUrl, { wrapperLimit: 5, withCredentials: true, resolveAll: false })
-      .then(response => this._filterOrGetNextAds(response))
+      .then(this._filterOrGetNextAds)
+      .catch(error => error)
   }
 
   _filterOrGetNextAds(response, adsToReturn = []) {
     const { ads } = response
-
     if (!ads || ads.length === 0) throw new Error('Empty ads')
 
     ads.forEach(ad => {
