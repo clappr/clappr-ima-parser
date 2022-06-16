@@ -12,7 +12,7 @@ describe('IMAParser', () => {
     const imaParser = new IMAParser()
 
     expect(imaParser._VMAPHandler instanceof VMAPManager).toBeTruthy()
-    expect(imaParser._VASTHandler instanceof VASTManager).toBeTruthy()
+    expect(imaParser.VASTHandler instanceof VASTManager).toBeTruthy()
   })
 
   describe('requestAdBreaks method', () => {
@@ -50,7 +50,7 @@ describe('IMAParser', () => {
     it('returns a promise', () => {
       const imaParser = new IMAParser()
       const adBreakMock = { category: 'preroll', timeOffset: 1000, adTag: {} }
-      jest.spyOn(imaParser._VASTHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve()))
+      jest.spyOn(imaParser.VASTHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve()))
       const result = imaParser.requestAds(adBreakMock.adTag)
 
       expect(result instanceof Promise).toBeTruthy()
