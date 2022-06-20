@@ -5,7 +5,7 @@ import VASTManager from './parsers/vast'
 export default class IMAParser {
   constructor() {
     this._VMAPHandler = new VMAPManager()
-    this._VASTHandler = new VASTManager()
+    this.VASTHandler = new VASTManager()
   }
 
   /**
@@ -32,7 +32,7 @@ export default class IMAParser {
    * @returns {Promise} Promise resolved with current available ads of the respected Ad tag.
    */
   requestAds(adTag) {
-    return this._VASTHandler.request(adTag)
+    return this.VASTHandler.request(adTag)
       .then(ad => {
         return ad
       })
