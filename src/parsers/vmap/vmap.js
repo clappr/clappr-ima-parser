@@ -1,4 +1,4 @@
-import { Log } from '@clappr/core'
+import { Log, $ } from '@clappr/core'
 import { hmsToMilliseconds } from '@/utils/str-to-time'
 import xml2json from '@/converts/xml2json'
 
@@ -9,18 +9,15 @@ export default class VMAPManager {
    * @returns {Promise} Promise resolved with raw AdBreaks list or one error.
    */
   request(url) {
-    return fetch(url)
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok')
-
-        return response.text()
-      }).then(responseInPlainText => {
-        const parser = new DOMParser()
-        const xml = parser.parseFromString(responseInPlainText, 'application/xml')
-        const rawAdBreaks = xml2json(xml.documentElement)
-
-        return rawAdBreaks
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url,
+        type: 'GET',
+        dataType: 'xml',
+        success: data => resolve(xml2json(data.documentElement)),
+        error: (xhr, errorType, error) => reject(error),
       })
+    })
   }
 
   /**
