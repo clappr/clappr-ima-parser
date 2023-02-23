@@ -10,11 +10,11 @@ export default class IMAParser {
 
   /**
    * Get a list of AdBreaks from the received URL.
-   * @param {String} url Ad Server URL to fetch VMAP XML.
+   * @param {Object} options ajax options.
    * @returns {Promise} Promise resolved with one array of AdBreaks or one error.
    */
-  requestAdBreaks(url) {
-    return this._VMAPHandler.request(url)
+  requestAdBreaks(options) {
+    return this._VMAPHandler.request(options)
       .then(rawAdBreak => this._VMAPHandler.filterRawData(rawAdBreak))
       .then(adBreaks => {
         Log.info(this.name, 'Available adBreaks: ', adBreaks)
@@ -33,9 +33,7 @@ export default class IMAParser {
    */
   requestAds(adTag) {
     return this.VASTHandler.request(adTag)
-      .then(ad => {
-        return ad
-      })
+      .then(ad => ad)
       .catch(error => Promise.reject(error))
   }
 }

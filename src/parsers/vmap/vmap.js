@@ -5,13 +5,13 @@ import xml2json from '@/converts/xml2json'
 export default class VMAPManager {
   /**
    * Request VMAP XML and parses to JSON.
-   * @param {String} URL ad server URL to request VMAP file.
+   * @param {Object} options ajax options.
    * @returns {Promise} Promise resolved with raw AdBreaks list or one error.
    */
-  request(url) {
+  request(options = {}) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url,
+        ...options,
         type: 'GET',
         dataType: 'xml',
         success: data => resolve(xml2json(data.documentElement)),
@@ -57,7 +57,7 @@ export default class VMAPManager {
         const adBreak = {
           category,
           adTag: item['vmap:AdSource']['vmap:AdTagURI'],
-          timeOffset: this.formatTimeOffset(timeOffset)
+          timeOffset: this.formatTimeOffset(timeOffset),
         }
 
         adBreaks.push(adBreak)
@@ -80,13 +80,11 @@ export default class VMAPManager {
         // Formatting all ad breaks with same structure to simplify manipulations.
         adData = Array.isArray(adData) ? adData : [adData]
 
-        const adBreak = adData.map(content => {
-          return {
-            category,
-            adTag: content.Ad,
-            timeOffset: this.formatTimeOffset(content['@timeOffset'])
-          }
-        })
+        const adBreak = adData.map(content => ({
+          category,
+          adTag: content.Ad,
+          timeOffset: this.formatTimeOffset(content['@timeOffset']),
+        }))
 
         adBreaks.push(...adBreak)
       }
@@ -103,7 +101,7 @@ export default class VMAPManager {
    * @param {Object} adBreakConfig
    * @returns {Object} adBreakConfig
    */
-   formatTimeOffset(timeOffset) {
+  formatTimeOffset(timeOffset) {
     return timeOffset ? hmsToMilliseconds(timeOffset) : null
   }
 }
