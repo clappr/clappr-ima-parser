@@ -19,7 +19,7 @@ describe('IMAParser', () => {
     it('returns a promise', () => {
       const imaParser = new IMAParser()
       jest.spyOn(imaParser._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(standardParsedVMAPMock)))
-      const result = imaParser.requestAdBreaks('https://server.com/vmap')
+      const result = imaParser.requestAdBreaks({ url: 'https://server.com/vmap' })
 
       expect(result instanceof Promise).toBeTruthy()
     })
@@ -28,9 +28,9 @@ describe('IMAParser', () => {
       const imaParser = new IMAParser()
       jest.spyOn(imaParser._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(standardParsedVMAPMock)))
 
-      imaParser.requestAdBreaks('https://server.com/vmap')
+      imaParser.requestAdBreaks({ url: 'https://server.com/vmap' })
         .then(result => {
-          expect(Object.keys(result[0])).toEqual([ 'category', 'adTag', 'timeOffset' ])
+          expect(Object.keys(result[0])).toEqual(['category', 'adTag', 'timeOffset'])
           done()
         })
     })
@@ -38,7 +38,7 @@ describe('IMAParser', () => {
     it('returns one error after the returned promise is rejected', done => {
       const imaParser = new IMAParser()
       jest.spyOn(imaParser._VMAPHandler, 'request').mockImplementationOnce(() => new Promise((_, reject) => reject('expected error')))
-      imaParser.requestAdBreaks('https://server.com/vmap')
+      imaParser.requestAdBreaks({ url: 'https://server.com/vmap' })
         .catch(error => {
           expect(error).toEqual('expected error')
           done()
