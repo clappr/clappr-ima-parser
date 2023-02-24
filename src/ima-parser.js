@@ -29,10 +29,11 @@ export default class IMAParser {
   /**
    * Get a list of ads available from the received Ad tag.
    * @param {Object} adTag  Ad tag URL to fetch VAST.
+   * @param {Object} timeout  A custom timeout for the requests.
    * @returns {Promise} Promise resolved with current available ads of the respected Ad tag.
    */
-  requestAds(adTag) {
-    return this.VASTHandler.request(adTag)
+  requestAds(adTag, timeout) {
+    return this.VASTHandler.request(adTag, timeout)
       .then(ad => ad)
       .catch(error => Promise.reject(error))
   }
