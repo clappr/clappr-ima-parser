@@ -1,5 +1,12 @@
 import { VASTClient } from '@dailymotion/vast-client'
 import AdBreak from './adbreak'
+
+/**
+ * Lib default timeout.
+ * https://github.com/dailymotion/vast-client-js/blob/master/docs/api/vast-client.md#parameters-1
+ */
+const defaultTimeout = 120000
+
 export default class VASTManager {
   /**
    * Initialize a new VastManager instance with one VASTClient lib instance.
@@ -11,10 +18,13 @@ export default class VASTManager {
   /**
    * Request VAST XML and returns one VASTResponse.Ad entity.
    * @param {Object} adData Contains the url to fetch the VAST document.
+   * @param {Object} timeout  A custom timeout for the requests.
    * @returns {Promise} Promise resolved with one VASTResponse.Ad entity or one error.
    * @see {@link https://github.com/dailymotion/vast-client-js/blob/master/docs/api/class-reference.md#ad}
    */
-  request(adData) {
+  request(adData, timeout) {
+    this.timeout = timeout || defaultTimeout
+
     return adData
       ? this._processAdData(adData)
       : Promise.reject('Invalid adTag received to request VAST')
@@ -25,7 +35,7 @@ export default class VASTManager {
     const vastRequests = []
 
     adBreak.adDataUrls.forEach(adUrl => {
-        vastRequests.push(this._requestVASTAdInformation(adUrl))
+      vastRequests.push(this._requestVASTAdInformation(adUrl))
     })
 
     return Promise.all(vastRequests).then(this._getAdsFromVast)
@@ -39,7 +49,7 @@ export default class VASTManager {
   }
 
   _requestVASTAdInformation(adUrl) {
-    return this.client.get(adUrl, { wrapperLimit: 5, withCredentials: true, resolveAll: false })
+    return this.client.get(adUrl, { wrapperLimit: 5, withCredentials: true, resolveAll: false, timeout: this.timeout })
       .then(this._filterOrGetNextAds)
       .catch(error => error)
   }
@@ -50,11 +60,10 @@ export default class VASTManager {
 
     ads.forEach(ad => {
       const hasMediaFiles = ad.creatives && ad.creatives.some(creative => creative.mediaFiles)
-      if (!hasMediaFiles && this.client.hasRemainingAds()) {
+      if (!hasMediaFiles && this.client.hasRemainingAds())
         this.client.getNextAds().then(response => this._filterOrGetNextAds(response, adsToReturn))
-      } else {
+      else
         adsToReturn.push(ad)
-      }
     })
 
     return adsToReturn
