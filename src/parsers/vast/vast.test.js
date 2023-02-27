@@ -1,5 +1,5 @@
 import VASTManager from './vast'
-import { VASTClient } from 'vast-client'
+import { VASTClient } from '@dailymotion/vast-client'
 
 describe('VASTManager', () => {
   let VASTHandler

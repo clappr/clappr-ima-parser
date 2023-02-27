@@ -1,4 +1,4 @@
-import { VASTClient } from 'vast-client'
+import { VASTClient } from '@dailymotion/vast-client'
 import AdBreak from './adbreak'
 export default class VASTManager {
   /**
