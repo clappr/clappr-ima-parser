@@ -939,6 +939,13 @@
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.21.tgz#51c8e84e3e7542e0f8dc7aefb81d26c8079d6bf8"
   integrity sha512-ReUiWsYgOCXosAMrCh6Zg8hoxQPtA4zM2njjcwfxVxKgeuF6Lrhm+PoNleJ5ST/r6EXdzgX5FZbEyMzUIV0GgQ==
 
+"@dailymotion/vast-client@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@dailymotion/vast-client/-/vast-client-4.0.1.tgz#c5c59990f4b57a8f580ff427cd78b90738f60f88"
+  integrity sha512-oRUCc06bWdX/1f2Eha/od5WCj+MLHiD6rgyAudgjOUyWXhCcbkUTZeejBSQsLft0nFnd+5nrDqGkBD8mrEVd/Q==
+  dependencies:
+    "@xmldom/xmldom" "^0.8.3"
+
 "@eslint/eslintrc@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-1.3.0.tgz#29f92c30bb3e771e4a2048c95fa6855392dfac4f"
@@ -1436,6 +1443,11 @@
   integrity sha512-T8Yc9wt/5LbJyCaLiHPReJa0kApcIgJ7Bn735GjItUfh08Z1pJvu8QZqb9s+mMvKV6WUQRV7K2R46YbjMXTTJw==
   dependencies:
     "@types/yargs-parser" "*"
+
+"@xmldom/xmldom@^0.8.3":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.6.tgz#8a1524eb5bd5e965c1e3735476f0262469f71440"
+  integrity sha512-uRjjusqpoqfmRkTaNuLJ2VohVr67Q5YwDATW3VU7PfzTj6IRaihGrYI7zckGZjxQPBIp63nfvJbM+Yu5ICh0Bg==
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.6"
@@ -4793,13 +4805,6 @@ validate-npm-package-name@^3.0.0:
   dependencies:
     builtins "^1.0.3"
 
-vast-client@^3.1.1:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/vast-client/-/vast-client-3.2.0.tgz#884b67e9b0cb0a80989f8cd75a6b287dc5d6a4a3"
-  integrity sha512-Ako03PIAq73YoMXwgBXWqJFBM62F+yULpUyJX9gQo+LGqay23SqOZD12LIYUv+r6UQ0NQAXPwpwuYhWrWKhH8w==
-  dependencies:
-    xmldom "github:xmldom/xmldom#0.7.0"
-
 verror@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
@@ -4925,10 +4930,6 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
-
-"xmldom@github:xmldom/xmldom#0.7.0":
-  version "0.7.0"
-  resolved "https://codeload.github.com/xmldom/xmldom/tar.gz/c568938641cc1f121cef5b4df80fcfda1e489b6e"
 
 y18n@^5.0.5:
   version "5.0.8"
