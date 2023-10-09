@@ -23,6 +23,14 @@ describe('VMAPManager', () => {
   })
 
   describe('filterRawData method', () => {
+    it('returns empty array for empty VMAP playlist', () => {
+      const VMAPHandler = new VMAPManager()
+
+      const response = VMAPHandler.filterRawData(null)
+
+      expect(response.length).toEqual(0)
+    })
+
     it('returns one array with AdBreaks', () => {
       const VMAPHandler = new VMAPManager()
 
