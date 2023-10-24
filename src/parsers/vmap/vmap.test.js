@@ -54,14 +54,16 @@ describe('VMAPManager', () => {
       const VMAPHandler = new VMAPManager()
       const invalidStandardVMAP = standardParsedVMAPMock
       invalidStandardVMAP['vmap:AdBreak'] = 'invalid'
+      const expectedErrorMessage = 'Cannot read properties of undefined (reading \'vmap:AdTagURI\')'
 
-      await expect(VMAPHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow('Cannot read property \'vmap:AdTagURI\' of undefined')
+      await expect(VMAPHandler.filterRawData(invalidStandardVMAP)).rejects.toThrow(expectedErrorMessage)
     })
 
     it('returns a rejected promise for Custom VMAP format decode errors', async() => {
       const VMAPHandler = new VMAPManager()
+      const expectedErrorMessage = 'Cannot read properties of null (reading \'Ad\')'
 
-      await expect(VMAPHandler.filterRawData({ p: null, q: null })).rejects.toThrow('Cannot read property \'Ad\' of null')
+      await expect(VMAPHandler.filterRawData({ p: null, q: null })).rejects.toThrow(expectedErrorMessage)
     })
   })
 })
