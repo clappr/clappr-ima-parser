@@ -26,6 +26,7 @@ export default class VMAPManager {
    * @returns {Array} All AdBreaks instances created or one error.
    */
   filterRawData(rawData) {
+    if (!rawData) return []
     return rawData['@version'] && rawData['vmap:AdBreak']
       ? this._filterStandardRawData(rawData)
       : this._filterCustomRawData(rawData)
