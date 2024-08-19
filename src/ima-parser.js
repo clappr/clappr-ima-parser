@@ -38,3 +38,5 @@ export default class IMAParser {
       .catch(error => Promise.reject(error))
   }
 }
+
+export { VASTTracker } from '@dailymotion/vast-client'
