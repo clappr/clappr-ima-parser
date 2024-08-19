@@ -1,21 +1,20 @@
-import { Log, $ } from '@clappr/core'
+import { Log } from '@clappr/core'
 import { hmsToMilliseconds } from '@/utils/str-to-time'
+import { urlHandler } from '@dailymotion/vast-client'
 import xml2json from '@/converts/xml2json'
 
 export default class VMAPManager {
   /**
-   * Request VMAP XML and parses to JSON.
-   * @param {Object} options ajax options.
+   * Requests VMAP XML and parses it to JSON.
+   * @param {string} url - The URL to request the VMAP XML from.
+   * @param {number} timeout - The timeout for the request in milliseconds.
    * @returns {Promise} Promise resolved with raw AdBreaks list or one error.
    */
-  request(options = {}) {
+  request(url, timeout) {
     return new Promise((resolve, reject) => {
-      $.ajax({
-        ...options,
-        type: 'GET',
-        dataType: 'xml',
-        success: data => resolve(xml2json(data.documentElement)),
-        error: (xhr, errorType, error) => reject(error),
+      urlHandler.get(url, { timeout }, (error, xml) => {
+        if (error) return reject(error)
+        resolve(xml2json(xml))
       })
     })
   }

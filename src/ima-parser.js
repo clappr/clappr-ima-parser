@@ -10,11 +10,12 @@ export default class IMAParser {
 
   /**
    * Get a list of AdBreaks from the received URL.
-   * @param {Object} options ajax options.
+   * @param {string} url - The URL to request AdBreak data from.
+   * @param {number} timeout - The timeout value for the request.
    * @returns {Promise} Promise resolved with one array of AdBreaks or one error.
    */
-  requestAdBreaks(options) {
-    return this._VMAPHandler.request(options)
+  requestAdBreaks(url, timeout) {
+    return this._VMAPHandler.request(url, timeout)
       .then(rawAdBreak => this._VMAPHandler.filterRawData(rawAdBreak))
       .then(adBreaks => {
         Log.info(this.name, 'Available adBreaks: ', adBreaks)
@@ -38,3 +39,5 @@ export default class IMAParser {
       .catch(error => Promise.reject(error))
   }
 }
+
+export { VASTTracker } from '@dailymotion/vast-client'

@@ -1,15 +1,15 @@
 class AdBreak {
-    constructor(adData) {
-      this.content = Array.isArray(adData) ? adData : [adData]
-    }
+  constructor(adData) {
+    this.content = Array.isArray(adData) ? adData : [adData]
+  }
 
-    get adDataUrls() {
-      return this.content.map(this.formatUrlString)
-    }
+  get adDataUrls() {
+    return this.content.map(this.formatUrlString)
+  }
 
-    formatUrlString(adUrl) {
-      return adUrl['#cdata'].replace(/[\s\n]+/, '')
-    }
+  formatUrlString(adUrl) {
+    return adUrl['#cdata'].replace(/[\s\n]+/, '')
+  }
 }
 
 export default AdBreak

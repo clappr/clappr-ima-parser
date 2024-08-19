@@ -8,7 +8,6 @@ import namedDirectory from 'rollup-plugin-named-directory'
 import size from 'rollup-plugin-sizes'
 import visualize from 'rollup-plugin-visualizer'
 import { terser } from 'rollup-plugin-terser'
-import pkg from './package.json'
 import babelConfig from './babel.config.json'
 
 const babelPluginForUMDBundle = createBabelInputPluginFactory()
@@ -25,19 +24,44 @@ const plugins = [
   !!process.env.ANALYZE_BUNDLE && visualize({ open: true }),
 ]
 
-const mainBundle = {
+const browserBundle = {
   input: 'src/ima-parser.js',
   external: ['@clappr/core'],
   output: [
     {
       name: 'IMAParser',
-      file: pkg.main,
+      exports: 'named',
+      file: 'dist/clappr-ima-parser.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
     },
     !!process.env.MINIMIZE && {
       name: 'IMAParser',
+      exports: 'named',
       file: 'dist/clappr-ima-parser.min.js',
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr' },
+      plugins: terser(),
+    },
+  ],
+  plugins: [babelPluginForUMDBundle(babelPluginOptions), resolve({ browser: true }), commonjs(), ...plugins],
+}
+
+const nodeBundle = {
+  input: 'src/ima-parser.js',
+  external: ['@clappr/core'],
+  output: [
+    {
+      name: 'IMAParser',
+      exports: 'named',
+      file: 'dist/clappr-ima-parser-node.js',
+      format: 'umd',
+      globals: { '@clappr/core': 'Clappr' },
+    },
+    !!process.env.MINIMIZE && {
+      name: 'IMAParser',
+      exports: 'named',
+      file: 'dist/clappr-ima-parser-node.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
       plugins: terser(),
@@ -51,7 +75,8 @@ const esmBundle = {
   external: ['@clappr/core', /@babel\/runtime/],
   output: {
     name: 'IMAParser',
-    file: pkg.module,
+    exports: 'named',
+    file: 'dist/clappr-ima-parser.esm.js',
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
   },
@@ -65,4 +90,4 @@ const esmBundle = {
   ],
 }
 
-export default [mainBundle, esmBundle]
+export default [browserBundle, nodeBundle, esmBundle]
