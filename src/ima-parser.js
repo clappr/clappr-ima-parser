@@ -13,8 +13,8 @@ export default class IMAParser {
    * @param {Object} options ajax options.
    * @returns {Promise} Promise resolved with one array of AdBreaks or one error.
    */
-  requestAdBreaks(options) {
-    return this._VMAPHandler.request(options)
+  requestAdBreaks(url, timeout) {
+    return this._VMAPHandler.request(url, timeout)
       .then(rawAdBreak => this._VMAPHandler.filterRawData(rawAdBreak))
       .then(adBreaks => {
         Log.info(this.name, 'Available adBreaks: ', adBreaks)
