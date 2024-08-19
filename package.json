@@ -23,9 +23,14 @@
     "/dist",
     "/src"
   ],
-  "source": "src/ima-parser.js",
-  "main": "dist/clappr-ima-parser.js",
-  "module": "dist/clappr-ima-parser.esm.js",
+  "main": "./dist/clappr-ima-parser-node.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/clappr-ima-parser.js",
+      "module": "./dist/clappr-ima-parser.esm.js",
+      "default": "./dist/clappr-ima-parser-node.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:clappr/clappr-ima-parser.git"
