@@ -5,8 +5,9 @@ import xml2json from '@/converts/xml2json'
 
 export default class VMAPManager {
   /**
-   * Request VMAP XML and parses to JSON.
-   * @param {Object} options ajax options.
+   * Requests VMAP XML and parses it to JSON.
+   * @param {string} url - The URL to request the VMAP XML from.
+   * @param {number} timeout - The timeout for the request in milliseconds.
    * @returns {Promise} Promise resolved with raw AdBreaks list or one error.
    */
   request(url, timeout) {

@@ -10,7 +10,8 @@ export default class IMAParser {
 
   /**
    * Get a list of AdBreaks from the received URL.
-   * @param {Object} options ajax options.
+   * @param {string} url - The URL to request AdBreak data from.
+   * @param {number} timeout - The timeout value for the request.
    * @returns {Promise} Promise resolved with one array of AdBreaks or one error.
    */
   requestAdBreaks(url, timeout) {
