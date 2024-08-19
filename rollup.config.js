@@ -30,12 +30,14 @@ const browserBundle = {
   output: [
     {
       name: 'IMAParser',
+      exports: 'named',
       file: 'dist/clappr-ima-parser.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
     },
     !!process.env.MINIMIZE && {
       name: 'IMAParser',
+      exports: 'named',
       file: 'dist/clappr-ima-parser.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
@@ -51,12 +53,14 @@ const nodeBundle = {
   output: [
     {
       name: 'IMAParser',
+      exports: 'named',
       file: 'dist/clappr-ima-parser-node.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
     },
     !!process.env.MINIMIZE && {
       name: 'IMAParser',
+      exports: 'named',
       file: 'dist/clappr-ima-parser-node.min.js',
       format: 'umd',
       globals: { '@clappr/core': 'Clappr' },
@@ -71,6 +75,7 @@ const esmBundle = {
   external: ['@clappr/core', /@babel\/runtime/],
   output: {
     name: 'IMAParser',
+    exports: 'named',
     file: 'dist/clappr-ima-parser.esm.js',
     format: 'esm',
     globals: { '@clappr/core': 'Clappr' },
