@@ -14,6 +14,7 @@ export default class VMAPManager {
     return new Promise((resolve, reject) => {
       urlHandler.get(url, { timeout }, (error, xml) => {
         if (error) return reject(error)
+        if (!xml) return reject({ message: 'Invalid empty response' })
         resolve(xml2json(xml))
       })
     })
