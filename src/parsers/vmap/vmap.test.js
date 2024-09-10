@@ -26,6 +26,39 @@ describe('VMAPManager', () => {
 
       await expect(VMAPHandler.request({ url: 'https://invali-ad-server.com/test', timeout: 2000 })).rejects.toMatch('Network response was not ok')
     })
+
+    it('should handle empty XML response', async () => {
+      const mockError = { message: 'Invalid empty response' }
+      urlHandler.get.mockImplementationOnce((url, options, callback) => callback(null, null))
+      const VMAPHandler = new VMAPManager()
+
+      await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).rejects.toEqual(mockError)
+      expect(xml2json).not.toHaveBeenCalled()
+    })
+
+    it('should resolve with parsed XML data', async() => {
+      const mockXML = '<VMAP></VMAP>'
+      const mockParsedData = { vmap: 'data' }
+      const VMAPHandler = new VMAPManager()
+      urlHandler.get.mockImplementationOnce((url, options, callback) => callback(null, mockXML))
+      xml2json.mockReturnValue(mockParsedData)
+
+      const result = await VMAPHandler.request('https://ad-server.com/test', 2000)
+
+      expect(urlHandler.get).toHaveBeenCalledWith('https://ad-server.com/test', { timeout: 2000 }, expect.any(Function))
+      expect(xml2json).toHaveBeenCalledWith(mockXML)
+      expect(result).toEqual(mockParsedData)
+    })
+
+    it('should handle timeout properly', async() => {
+      const mockError = 'Timeout'
+      const VMAPHandler = new VMAPManager()
+      urlHandler.get.mockImplementationOnce((url, options, callback) => setTimeout(() => callback(mockError, null), 3000))
+
+      await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).rejects.toEqual(mockError)
+
+      expect(urlHandler.get).toHaveBeenCalledWith('https://ad-server.com/test', { timeout: 2000 }, expect.any(Function))
+    })
   })
 
   describe('filterRawData method', () => {
@@ -79,40 +112,5 @@ describe('VMAPManager', () => {
 
       await expect(VMAPHandler.filterRawData({ p: null, q: null })).rejects.toThrow(expectedErrorMessage)
     })
-  })
-
-  it('should resolve with parsed XML data', async() => {
-    const mockXML = '<VMAP></VMAP>'
-    const mockParsedData = { vmap: 'data' }
-    const VMAPHandler = new VMAPManager()
-    urlHandler.get.mockImplementation((url, options, callback) => callback(null, mockXML))
-    xml2json.mockReturnValue(mockParsedData)
-
-    const result = await VMAPHandler.request('https://ad-server.com/test', 2000)
-
-    expect(urlHandler.get).toHaveBeenCalledWith('https://ad-server.com/test', { timeout: 2000 }, expect.any(Function))
-    expect(xml2json).toHaveBeenCalledWith(mockXML)
-    expect(result).toEqual(mockParsedData)
-  })
-
-  it('should handle timeout properly', async() => {
-    const mockError = 'Timeout'
-    const VMAPHandler = new VMAPManager()
-    urlHandler.get.mockImplementation((url, options, callback) => setTimeout(() => callback(mockError, null), 3000))
-
-    await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).rejects.toEqual(mockError)
-
-    expect(urlHandler.get).toHaveBeenCalledWith('https://ad-server.com/test', { timeout: 2000 }, expect.any(Function))
-  })
-
-  it('should handle empty XML response', async() => {
-    urlHandler.get.mockImplementation((url, options, callback) => callback(null, ''))
-    xml2json.mockReturnValue(null)
-    const VMAPHandler = new VMAPManager()
-
-    await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).resolves.toBeNull()
-
-    expect(urlHandler.get).toHaveBeenCalledWith('https://ad-server.com/test', { timeout: 2000 }, expect.any(Function))
-    expect(xml2json).toHaveBeenCalledWith('')
   })
 })
