@@ -64,7 +64,7 @@ export default class VMAPManager {
         adBreaks.push(adBreak)
       })
     } catch (error) {
-      Log.error(this.name, 'Build AdBreak process fail', error)
+      Log.error('VMAP', 'Build AdBreak process fail', error)
       return Promise.reject(error)
     }
 
@@ -90,7 +90,7 @@ export default class VMAPManager {
         adBreaks.push(...adBreak)
       }
     } catch (error) {
-      Log.error(this.name, 'Build AdBreak process fail', error)
+      Log.error('VMAP', 'Build AdBreak process fail', error)
       return Promise.reject(error)
     }
 
