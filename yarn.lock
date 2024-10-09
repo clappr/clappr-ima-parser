@@ -941,7 +941,7 @@
 
 "@dailymotion/vast-client@git+https://github.com/arielfurtado/vast-client-js.git#improve-node-environment":
   version "4.0.1"
-  resolved "git+https://github.com/arielfurtado/vast-client-js.git#6b07bd50e0bae5ac63e58f81f95727b548a22d43"
+  resolved "git+https://github.com/arielfurtado/vast-client-js.git#1d1769e665758b1e87bdf58c6e0f619e330df480"
   dependencies:
     "@xmldom/xmldom" "^0.8.3"
 
