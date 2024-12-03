@@ -939,7 +939,7 @@
   resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.21.tgz#51c8e84e3e7542e0f8dc7aefb81d26c8079d6bf8"
   integrity sha512-ReUiWsYgOCXosAMrCh6Zg8hoxQPtA4zM2njjcwfxVxKgeuF6Lrhm+PoNleJ5ST/r6EXdzgX5FZbEyMzUIV0GgQ==
 
-"@dailymotion/vast-client@git+https://github.com/arielfurtado/vast-client-js.git#improve-node-environment":
+"@dailymotion/vast-client@git+https://github.com/arielfurtado/vast-client-js.git#1d1769e665758b1e87bdf58c6e0f619e330df480":
   version "4.0.1"
   resolved "git+https://github.com/arielfurtado/vast-client-js.git#1d1769e665758b1e87bdf58c6e0f619e330df480"
   dependencies:
