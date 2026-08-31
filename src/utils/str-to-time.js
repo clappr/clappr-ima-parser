@@ -11,9 +11,15 @@ export const hmsToMilliseconds = adsTimeOffset => {
   if (adsTimeOffset && adsTimeOffset.split) {
     const values = adsTimeOffset.split(':')
 
-    return parseInt(values[2], 10) * SECONDS_TO_MILLISECONDS
-      + parseInt(values[1], 10) * MINUTES_TO_MILLISECONDS
-      + parseInt(values[0], 10) * HOURS_TO_MILLISECONDS
+    if (values.length !== 3) return null
+
+    const [hours, minutes, seconds] = values.map(part => parseInt(part, 10))
+
+    if ([hours, minutes, seconds].some(Number.isNaN)) return null
+
+    return seconds * SECONDS_TO_MILLISECONDS
+      + minutes * MINUTES_TO_MILLISECONDS
+      + hours * HOURS_TO_MILLISECONDS
   }
 
   return null
