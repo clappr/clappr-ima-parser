@@ -77,6 +77,8 @@ export default class VMAPManager {
 
     try {
       for (let [category, adData] of rawDataOnArray) {
+        if (category.startsWith('@')) continue
+
         // Only Mid-roll is structured on array by default.
         // Formatting all ad breaks with same structure to simplify manipulations.
         adData = Array.isArray(adData) ? adData : [adData]
@@ -85,7 +87,7 @@ export default class VMAPManager {
           category,
           adTag: content.Ad,
           timeOffset: this.formatTimeOffset(content['@timeOffset']),
-        }))
+        })).filter(entry => entry.adTag)
 
         adBreaks.push(...adBreak)
       }

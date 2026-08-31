@@ -69,6 +69,31 @@ describe('VMAPManager', () => {
       expect(response.length).toEqual(0)
     })
 
+    it('returns empty array for a VMAP with version but no AdBreak', () => {
+      const VMAPHandler = new VMAPManager()
+
+      expect(VMAPHandler.filterRawData({ '@version': '1.0' })).toEqual([])
+    })
+
+    it('ignores XML attributes when parsing custom VMAP', () => {
+      const VMAPHandler = new VMAPManager()
+      const response = VMAPHandler.filterRawData({
+        '@version': '1.0',
+        '@xmlns:vmap': 'http://www.iab.net/videosuite/vmap',
+        Preroll: { Ad: { '#cdata': 'https://ad.example/vast' } },
+      })
+
+      expect(response).toHaveLength(1)
+      expect(response[0].category).toBe('Preroll')
+      expect(response[0].adTag).toEqual({ '#cdata': 'https://ad.example/vast' })
+    })
+
+    it('discards custom VMAP entries without an adTag', () => {
+      const VMAPHandler = new VMAPManager()
+
+      expect(VMAPHandler.filterRawData({ Preroll: { '@timeOffset': 'start' } })).toEqual([])
+    })
+
     it('returns one array with AdBreaks', () => {
       const VMAPHandler = new VMAPManager()
 
