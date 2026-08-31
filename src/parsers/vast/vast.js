@@ -59,7 +59,7 @@ export default class VASTManager {
   }
 
   _filterOrGetNextAds(response, adsToReturn = [], errors = []) {
-    const { ads } = response
+    const { ads, version } = response
     if (!ads || ads.length === 0)
       return Promise.resolve({ ads: adsToReturn, errors })
 
@@ -69,7 +69,7 @@ export default class VASTManager {
         return this.client.getNextAds()
           .then(next => this._filterOrGetNextAds(next, adsToReturn, errors))
           .catch(error => errors.push(toError(error)))
-      adsToReturn.push(ad)
+      adsToReturn.push({ ...ad, vastVersion: version })
     }), Promise.resolve()).then(() => ({ ads: adsToReturn, errors }))
   }
 }
