@@ -139,5 +139,55 @@ describe('VASTManager', () => {
 
       await expect(VASTHandler.request({ '#cdata': url })).resolves.toEqual({ ads: [inlineAd], errors: [] })
     })
+
+    it('keeps a valid ad when a wrapper in the same URL resolves empty', async() => {
+      const wrapperAd = { creatives: [] }
+      jest.spyOn(VASTHandler.client, 'get').mockResolvedValueOnce({ ads: [adsWithMediaFiles[0], wrapperAd] })
+      jest.spyOn(VASTHandler.client, 'hasRemainingAds').mockReturnValue(true)
+      jest.spyOn(VASTHandler.client, 'getNextAds').mockResolvedValueOnce({ ads: [] })
+
+      await expect(VASTHandler.request({ '#cdata': url })).resolves.toEqual({
+        ads: adsWithMediaFiles,
+        errors: [],
+      })
+    })
+
+    it('keeps a later valid ad when an earlier wrapper in the same URL resolves empty', async() => {
+      const wrapperAd = { creatives: [] }
+      jest.spyOn(VASTHandler.client, 'get').mockResolvedValueOnce({ ads: [wrapperAd, adsWithMediaFiles[0]] })
+      jest.spyOn(VASTHandler.client, 'hasRemainingAds').mockReturnValue(true)
+      jest.spyOn(VASTHandler.client, 'getNextAds').mockResolvedValueOnce({ ads: [] })
+
+      await expect(VASTHandler.request({ '#cdata': url })).resolves.toEqual({
+        ads: adsWithMediaFiles,
+        errors: [],
+      })
+    })
+
+    it('keeps collected ads and the error when a wrapper in the same URL fails', async() => {
+      const wrapperAd = { creatives: [] }
+      const networkError = new Error('HTTP 502')
+      jest.spyOn(VASTHandler.client, 'get').mockResolvedValueOnce({ ads: [adsWithMediaFiles[0], wrapperAd] })
+      jest.spyOn(VASTHandler.client, 'hasRemainingAds').mockReturnValue(true)
+      jest.spyOn(VASTHandler.client, 'getNextAds').mockRejectedValueOnce(networkError)
+
+      await expect(VASTHandler.request({ '#cdata': url })).resolves.toEqual({
+        ads: adsWithMediaFiles,
+        errors: [networkError],
+      })
+    })
+
+    it('returns the inline ad and the resolved wrapper ad from the same URL', async() => {
+      const wrapperAd = { creatives: [] }
+      const inlineFromWrapper = { creatives: [{ mediaFiles: {} }] }
+      jest.spyOn(VASTHandler.client, 'get').mockResolvedValueOnce({ ads: [adsWithMediaFiles[0], wrapperAd] })
+      jest.spyOn(VASTHandler.client, 'hasRemainingAds').mockReturnValue(true)
+      jest.spyOn(VASTHandler.client, 'getNextAds').mockResolvedValueOnce({ ads: [inlineFromWrapper] })
+
+      await expect(VASTHandler.request({ '#cdata': url })).resolves.toEqual({
+        ads: [adsWithMediaFiles[0], inlineFromWrapper],
+        errors: [],
+      })
+    })
   })
 })

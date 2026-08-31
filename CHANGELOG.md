@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.1
+
+### Bug Fixes
+
+- A wrapper in the same VAST URL that resolves empty or fails no longer discards ads already collected from that URL.
+- An empty wrapper resolution is not a request error.
+- A wrapper request failure (timeout, HTTP, network) is recorded in `errors` alongside the collected ads.
+- Genuine no-fill (the VAST response itself has no ads) is still `{ ads: [], errors: [] }`.
+
 ## 3.0.0
 
 ### Breaking Changes
