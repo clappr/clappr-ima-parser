@@ -23,7 +23,8 @@ describe('VASTManager', () => {
     it('returns one error for no adData received', done => {
       VASTHandler.request()
         .catch(error => {
-          expect(error).toEqual('Invalid adTag received to request VAST')
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toBe('Invalid adTag received to request VAST')
           done()
         })
     })

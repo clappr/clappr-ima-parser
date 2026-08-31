@@ -30,7 +30,7 @@ export default class VASTManager {
 
     return adData
       ? this._processAdData(adData)
-      : Promise.reject('Invalid adTag received to request VAST')
+      : Promise.reject(toError('Invalid adTag received to request VAST'))
   }
 
   _processAdData(adBreakContent) {
