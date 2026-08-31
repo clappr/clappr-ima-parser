@@ -32,4 +32,10 @@ describe('AdBreak', () => {
 
     expect(adBreak.adDataUrls).toEqual([url, url])
   })
+
+  it('strips every whitespace sequence from the AdTagURI', () => {
+    const adBreak = new AdBreak({ '#cdata': 'https://ad-server.com/\ntest\n?vad_type=linear' })
+
+    expect(adBreak.adDataUrls).toEqual(['https://ad-server.com/test?vad_type=linear'])
+  })
 })

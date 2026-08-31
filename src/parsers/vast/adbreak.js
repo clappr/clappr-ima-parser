@@ -10,7 +10,7 @@ class AdBreak {
   formatUrlString(adUrl) {
     const raw = adUrl && (adUrl['#cdata'] || adUrl['#text'])
     if (typeof raw !== 'string') return
-    return raw.replace(/[\s\n]+/, '')
+    return raw.replace(/\s+/g, '')
   }
 }
 
