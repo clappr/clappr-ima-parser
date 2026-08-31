@@ -27,12 +27,11 @@ describe('VMAPManager', () => {
       await expect(VMAPHandler.request({ url: 'https://invali-ad-server.com/test', timeout: 2000 })).rejects.toMatch('Network response was not ok')
     })
 
-    it('should handle empty XML response', async () => {
-      const mockError = { message: 'Invalid empty response' }
+    it('should handle empty XML response', async() => {
       urlHandler.get.mockImplementationOnce((url, options, callback) => callback(null, null))
       const VMAPHandler = new VMAPManager()
 
-      await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).rejects.toEqual(mockError)
+      await expect(VMAPHandler.request('https://ad-server.com/test', 2000)).rejects.toThrow('Invalid empty response')
       expect(xml2json).not.toHaveBeenCalled()
     })
 
