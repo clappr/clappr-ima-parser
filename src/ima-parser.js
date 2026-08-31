@@ -8,6 +8,10 @@ export default class IMAParser {
     this.VASTHandler = new VASTManager()
   }
 
+  get name() {
+    return 'IMAParser'
+  }
+
   /**
    * Get a list of AdBreaks from the received URL.
    * @param {string} url - The URL to request AdBreak data from.

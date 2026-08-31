@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { Log } from '@clappr/core'
 import IMAParser from './ima-parser'
 import VMAPManager from './parsers/vmap'
 import VASTManager from './parsers/vast'
@@ -13,6 +14,10 @@ describe('IMAParser', () => {
 
     expect(imaParser._VMAPHandler instanceof VMAPManager).toBeTruthy()
     expect(imaParser.VASTHandler instanceof VASTManager).toBeTruthy()
+  })
+
+  it('exposes IMAParser as the log name', () => {
+    expect(new IMAParser().name).toBe('IMAParser')
   })
 
   describe('requestAdBreaks method', () => {
@@ -27,10 +32,12 @@ describe('IMAParser', () => {
     it('returns an AdBreaks list after the returned promise is resolved', done => {
       const imaParser = new IMAParser()
       jest.spyOn(imaParser._VMAPHandler, 'request').mockImplementationOnce(() => new Promise(resolve => resolve(standardParsedVMAPMock)))
+      jest.spyOn(Log, 'info').mockImplementation(() => {})
 
       imaParser.requestAdBreaks({ url: 'https://server.com/vmap' })
         .then(result => {
           expect(Object.keys(result[0])).toEqual(['category', 'adTag', 'timeOffset'])
+          expect(Log.info).toHaveBeenCalledWith('IMAParser', 'Available adBreaks: ', result)
           done()
         })
     })
@@ -38,9 +45,11 @@ describe('IMAParser', () => {
     it('returns one error after the returned promise is rejected', done => {
       const imaParser = new IMAParser()
       jest.spyOn(imaParser._VMAPHandler, 'request').mockImplementationOnce(() => new Promise((_, reject) => reject('expected error')))
+      jest.spyOn(Log, 'error').mockImplementation(() => {})
       imaParser.requestAdBreaks({ url: 'https://server.com/vmap' })
         .catch(error => {
           expect(error).toEqual('expected error')
+          expect(Log.error).toHaveBeenCalledWith('IMAParser', 'Fail to request VMAP: ', error)
           done()
         })
     })
