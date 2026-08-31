@@ -6,6 +6,9 @@ import AdBreak from './adbreak'
  * https://github.com/dailymotion/vast-client-js/blob/master/docs/api/vast-client.md#parameters-1
  */
 const defaultTimeout = 120000
+const emptyAdsErrorMessage = 'Empty ads'
+
+const toError = error => (error instanceof Error ? error : new Error(error))
 
 export default class VASTManager {
   /**
@@ -16,10 +19,11 @@ export default class VASTManager {
   }
 
   /**
-   * Request VAST XML and returns one VASTResponse.Ad entity.
+   * Request VAST XML and returns ads plus any request failures.
    * @param {Object} adData Contains the url to fetch the VAST document.
    * @param {Object} timeout  A custom timeout for the requests.
-   * @returns {Promise} Promise resolved with one VASTResponse.Ad entity or one error.
+   * @returns {Promise<{ ads: Array, errors: Error[] }>} Ads from successful URLs and request errors from failed ones.
+   *   Empty ads with empty errors means no-fill. The promise rejects only when adData is missing.
    * @see {@link https://github.com/dailymotion/vast-client-js/blob/master/docs/api/class-reference.md#ad}
    */
   request(adData, timeout) {
@@ -38,34 +42,38 @@ export default class VASTManager {
       vastRequests.push(this._requestVASTAdInformation(adUrl))
     })
 
-    return Promise.all(vastRequests).then(this._getAdsFromVast)
+    return Promise.all(vastRequests).then(results => this._getAdsFromVast(results))
   }
 
   _getAdsFromVast(vastRequestsResult) {
-    return vastRequestsResult.reduce((ads, adsList) => {
-      Array.isArray(adsList) && ads.push(...adsList)
-      return ads
-    }, [])
+    return vastRequestsResult.reduce((aggregated, result) => {
+      result && Array.isArray(result.ads) && aggregated.ads.push(...result.ads)
+      result && Array.isArray(result.errors) && aggregated.errors.push(...result.errors)
+      return aggregated
+    }, { ads: [], errors: [] })
   }
 
   _requestVASTAdInformation(adUrl) {
     return this.client.get(adUrl, { wrapperLimit: 5, withCredentials: true, resolveAll: false, timeout: this.timeout })
-      .then(this._filterOrGetNextAds)
-      .catch(error => error)
+      .then(response => this._filterOrGetNextAds(response))
+      .then(ads => ({ ads, errors: [] }))
+      .catch(error => {
+        if (error && error.message === emptyAdsErrorMessage)
+          return { ads: [], errors: [] }
+
+        return { ads: [], errors: [toError(error)] }
+      })
   }
 
   _filterOrGetNextAds(response, adsToReturn = []) {
     const { ads } = response
-    if (!ads || ads.length === 0) throw new Error('Empty ads')
+    if (!ads || ads.length === 0) throw new Error(emptyAdsErrorMessage)
 
-    ads.forEach(ad => {
+    return ads.reduce((chain, ad) => chain.then(() => {
       const hasMediaFiles = ad.creatives && ad.creatives.some(creative => creative.mediaFiles)
       if (!hasMediaFiles && this.client.hasRemainingAds())
-        this.client.getNextAds().then(response => this._filterOrGetNextAds(response, adsToReturn))
-      else
-        adsToReturn.push(ad)
-    })
-
-    return adsToReturn
+        return this.client.getNextAds().then(next => this._filterOrGetNextAds(next, adsToReturn))
+      adsToReturn.push(ad)
+    }), Promise.resolve()).then(() => adsToReturn)
   }
 }
