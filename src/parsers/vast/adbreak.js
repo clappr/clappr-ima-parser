@@ -4,11 +4,13 @@ class AdBreak {
   }
 
   get adDataUrls() {
-    return this.content.map(this.formatUrlString)
+    return this.content.map(this.formatUrlString).filter(Boolean)
   }
 
   formatUrlString(adUrl) {
-    return adUrl['#cdata'].replace(/[\s\n]+/, '')
+    const raw = adUrl && (adUrl['#cdata'] || adUrl['#text'])
+    if (typeof raw !== 'string') return
+    return raw.replace(/[\s\n]+/, '')
   }
 }
 

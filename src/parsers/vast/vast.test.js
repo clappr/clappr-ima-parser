@@ -74,6 +74,18 @@ describe('VASTManager', () => {
       })
     })
 
+    it('requests VAST from a #text AdTagURI when #cdata is absent', async() => {
+      jest.spyOn(VASTHandler.client, 'get').mockResolvedValueOnce({ ads: [] })
+
+      await expect(VASTHandler.request({ '#text': url })).resolves.toEqual({ ads: [], errors: [] })
+      expect(VASTHandler.client.get).toHaveBeenCalledWith(url, expect.any(Object))
+    })
+
+    it('does not throw when an AdTagURI has neither #cdata nor #text', async() => {
+      expect(() => VASTHandler.request({ '@templateType': 'vast3' })).not.toThrow()
+      await expect(VASTHandler.request({ '@templateType': 'vast3' })).resolves.toEqual({ ads: [], errors: [] })
+    })
+
     it('returns an empty array if the ads is empty', async() => {
       jest.spyOn(VASTHandler.client, 'get').mockImplementationOnce(() => new Promise(resolve => resolve({})))
 
