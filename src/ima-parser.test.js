@@ -64,5 +64,13 @@ describe('IMAParser', () => {
           done()
         })
     })
+
+    it('resolves with ads and errors from VASTHandler', async() => {
+      const imaParser = new IMAParser()
+      const result = { ads: [{ id: '1' }], errors: [] }
+      jest.spyOn(imaParser.VASTHandler, 'request').mockResolvedValueOnce(result)
+
+      await expect(imaParser.requestAds({ '#cdata': 'https://ad-server.com/vast' })).resolves.toEqual(result)
+    })
   })
 })
