@@ -1,6 +1,6 @@
 {
   "name": "@clappr/ima-parser",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "A Lib to communicate with IMA and play ads.",
   "keywords": [
     "clappr",

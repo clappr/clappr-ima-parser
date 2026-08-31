@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.1.0
+
+### Features
+
+- Each ad in `{ ads, errors }` now includes `vastVersion` from the VAST response that produced it, including wrapper `getNextAds` documents. The `{ ads, errors }` shape is unchanged.
+
+### Bug Fixes
+
+- `VASTManager.request` rejects with an `Error` when no adTag is provided, instead of a string.
+- `AdBreak` reads `AdTagURI` from `#cdata` or `#text` and skips entries that have neither, instead of throwing a synchronous TypeError.
+- `VMAPManager.request` rejects an empty XML response with an `Error`, instead of a plain object.
+- All whitespace sequences are stripped from ad tag URLs (the previous replace only cleared the first run).
+- A VMAP with `@version` but no `vmap:AdBreak` returns `[]` instead of a fake break whose `adTag` is undefined.
+- `xml2json` escape keeps apostrophes and escapes double quotes, instead of turning `'` into `\"`.
+- Malformed time offsets return `null` instead of `NaN`.
+- `IMAParser` logs use the `IMAParser` tag (`this.name` was undefined).
+
 ## 3.0.1
 
 ### Bug Fixes
